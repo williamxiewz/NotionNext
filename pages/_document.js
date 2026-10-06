@@ -62,20 +62,7 @@ class MyDocument extends Document {
                     type='font/woff2'
                     crossOrigin='anonymous'
                   />
-                  <link
-                    rel='preload'
-                    href='/vendor/fontawesome/webfonts/fa-regular-400.woff2'
-                    as='font'
-                    type='font/woff2'
-                    crossOrigin='anonymous'
-                  />
-                  <link
-                    rel='preload'
-                    href='/vendor/fontawesome/webfonts/fa-brands-400.woff2'
-                    as='font'
-                    type='font/woff2'
-                    crossOrigin='anonymous'
-                  />
+                  {/* 只预加载最常用的 solid；regular/brands 按需加载，避免与首屏内容争抢带宽 */}
                 </>
               )}
               <style

@@ -123,6 +123,15 @@ const AdSlot = ({ type = 'show' }) => {
   if (!ADSENSE_GOOGLE_ID) {
     return null
   }
+  // 未配置对应广告位 ID 时不渲染（避免空白占位与无效请求），此时仅依赖自动广告
+  const slotKey = {
+    'in-article': 'ADSENSE_GOOGLE_SLOT_IN_ARTICLE',
+    flow: 'ADSENSE_GOOGLE_SLOT_FLOW',
+    native: 'ADSENSE_GOOGLE_SLOT_NATIVE'
+  }[type] || 'ADSENSE_GOOGLE_SLOT_AUTO'
+  if (!siteConfig(slotKey)) {
+    return null
+  }
   // 文章内嵌广告
   if (type === 'in-article') {
     return (
@@ -187,6 +196,9 @@ const AdEmbed = () => {
   const ADSENSE_GOOGLE_TEST = siteConfig('ADSENSE_GOOGLE_TEST')
   const ADSENSE_GOOGLE_SLOT_AUTO = siteConfig('ADSENSE_GOOGLE_SLOT_AUTO')
   useEffect(() => {
+    if (!ADSENSE_GOOGLE_ID || !ADSENSE_GOOGLE_SLOT_AUTO) {
+      return
+    }
     setTimeout(() => {
       // 找到所有 class 为 notion-text 且内容为 '<ins/>' 的 div 元素
       const notionTextElements = document.querySelectorAll(

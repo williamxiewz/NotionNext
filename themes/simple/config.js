@@ -16,6 +16,9 @@ const CONFIG = {
 
   SIMPLE_ARTICLE_RECOMMEND_POSTS: process.env.NEXT_PUBLIC_SIMPLE_ARTICLE_RECOMMEND_POSTS || true, // 文章详情底部显示推荐
 
+  // 页脚链接，格式：名称|链接，多个用英文逗号分隔；留空则不显示。可在 Notion 配置中心覆盖
+  SIMPLE_FOOTER_LINKS: process.env.NEXT_PUBLIC_THEME_SIMPLE_FOOTER_LINKS || '关于|/about,联系|/contact,隐私政策|/privacy-policy',
+
   // 菜单配置
   SIMPLE_MENU_CATEGORY: true, // 显示分类
   SIMPLE_MENU_TAG: true, // 显示标签
