@@ -1,6 +1,7 @@
 // import '@/styles/animate.css' // @see https://animate.style/
 import '@/styles/globals.css'
 import '@/styles/utility-patterns.css'
+import { Analytics } from '@vercel/analytics/react'
 
 // core styles shared by all of react-notion-x (required)
 import 'react-notion-x/src/styles.css' // 原版的react-notion-x
@@ -102,6 +103,7 @@ const MyApp = ({ Component, pageProps }) => {
       ) : (
         content
       )}
+      <Analytics />
     </>
   )
 }
