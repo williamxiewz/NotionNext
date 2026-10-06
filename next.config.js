@@ -11,7 +11,22 @@ const withBundleAnalyzer = require('@next/bundle-analyzer')({
 })
 
 // 扫描项目 /themes下的目录名
-const themes = scanSubdirectories(path.resolve(__dirname, 'themes'))
+const themesDir = path.resolve(__dirname, 'themes')
+// 设置了 NEXT_PUBLIC_THEME 时只编译该主题，缩短构建时间与产物体积（?theme= 预览与 Notion 切换主题随之失效）；
+// 未设置时保持编译全部主题。
+const allThemes = scanSubdirectories(themesDir)
+const themeAllowlist =
+  process.env.NEXT_PUBLIC_THEME && allThemes.includes(BLOG.THEME)
+    ? [BLOG.THEME]
+    : []
+if (process.env.NEXT_PUBLIC_THEME && themeAllowlist.length === 0) {
+  console.warn(
+    `[ThemeResolver] NEXT_PUBLIC_THEME="${BLOG.THEME}" 不存在于 /themes，已回退为编译全部主题`
+  )
+}
+const themes = allThemes.filter(
+  name => themeAllowlist.length === 0 || themeAllowlist.includes(name)
+)
 // 检测用户开启的多语言
 const locales = (function () {
   // 根据BLOG_NOTION_PAGE_ID 检查支持多少种语言数据.
@@ -402,7 +417,17 @@ const nextConfig = {
         //   }
       ]
     },
-  webpack: (config, { dev, isServer }) => {
+  webpack: (config, { dev, isServer, webpack }) => {
+    // 主题白名单：限制 import(`@/themes/${name}`) 的打包范围，只编译名单内的主题目录
+    if (themeAllowlist.length > 0) {
+      config.plugins.push(
+        new webpack.ContextReplacementPlugin(
+          new RegExp(`^${themesDir.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}$`),
+          new RegExp(`^\\./(${themes.join('|')})(/.*)?$`)
+        )
+      )
+    }
+
     config.ignoreWarnings = [
       ...(config.ignoreWarnings || []),
       {
