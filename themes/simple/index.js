@@ -37,9 +37,8 @@ const ArticleAround = dynamic(() => import('./components/ArticleAround'), {
 })
 const ShareBar = dynamic(() => import('@/components/ShareBar'), { ssr: false })
 const TopBar = dynamic(() => import('./components/TopBar'), { ssr: false })
-// 顶部和导航需服务端渲染，否则水合后才插入 369px 内容，造成首屏布局偏移（CLS）
-const Header = dynamic(() => import('./components/Header'))
-const NavBar = dynamic(() => import('./components/NavBar'))
+const Header = dynamic(() => import('./components/Header'), { ssr: false })
+const NavBar = dynamic(() => import('./components/NavBar'), { ssr: false })
 const SideBar = dynamic(() => import('./components/SideBar'), { ssr: false })
 const JumpToTopButton = dynamic(() => import('./components/JumpToTopButton'), {
   ssr: false
